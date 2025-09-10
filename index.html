@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz de Português</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #6a11cb, #2575fc);
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .quiz-container {
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(10px);
+      padding: 30px;
+      border-radius: 15px;
+      max-width: 700px;
+      width: 100%;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      text-align: center;
+    }
+    h1 {
+      margin-bottom: 20px;
+      font-size: 26px;
+    }
+    .question {
+      font-size: 18px;
+      margin: 15px 0;
+    }
+    .options button {
+      display: block;
+      width: 100%;
+      margin: 8px 0;
+      padding: 12px;
+      font-size: 16px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .options button:hover {
+      background: rgba(255,255,255,0.2);
+    }
+    .correct { background: #4CAF50 !important; }
+    .wrong { background: #E53935 !important; }
+    #next-btn {
+      margin-top: 20px;
+      padding: 12px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 10px;
+      background: #ff9800;
+      cursor: pointer;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="quiz-container">
+    <h1>Quiz de Português</h1>
+    <div id="quiz">
+      <p id="question" class="question"></p>
+      <div id="options" class="options"></div>
+      <button id="next-btn">Próxima</button>
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+      // Módulo 25 - Fábula
+      {
+        question: "O que caracteriza uma fábula?",
+        options: [
+          "Narrativa curta com animais que falam e moral da história",
+          "Narrativa longa com heróis e batalhas",
+          "Texto científico explicando fenômenos"
+        ],
+        answer: 0
+      },
+      {
+        question: "Qual é a principal função da fábula?",
+        options: [
+          "Ensinar valores e lições de vida",
+          "Apresentar dados históricos",
+          "Explicar fenômenos naturais"
+        ],
+        answer: 0
+      },
+      {
+        question: "Os personagens da fábula geralmente são:",
+        options: [
+          "Animais que agem como seres humanos",
+          "Deuses e heróis mitológicos",
+          "Cientistas e filósofos"
+        ],
+        answer: 0
+      },
+
+      // Módulo 26 - Narrativa e linguagem
+      {
+        question: "O que são efeitos de sentido da linguagem em uma narrativa?",
+        options: [
+          "A forma como as escolhas de palavras e expressões influenciam o significado",
+          "Um erro de gramática no texto",
+          "Somente a moral no final do texto"
+        ],
+        answer: 0
+      },
+      {
+        question: "Exemplo de recurso expressivo da linguagem:",
+        options: [
+          "Metáfora, comparação, personificação",
+          "Tabuada e cálculos matemáticos",
+          "Datas históricas exatas"
+        ],
+        answer: 0
+      },
+      {
+        question: "O que é derivação de palavras?",
+        options: [
+          "Formar novas palavras a partir de outras (ex.: feliz → felicidade)",
+          "Traduzir palavras de outra língua",
+          "Apagar palavras de um texto"
+        ],
+        answer: 0
+      },
+
+      // Módulo 27 - Fábulas para ensinar
+      {
+        question: "Por que as fábulas são usadas como histórias para ensinar?",
+        options: [
+          "Porque transmitem lições de vida de forma simples",
+          "Porque são longas e detalhadas",
+          "Porque explicam conceitos científicos"
+        ],
+        answer: 0
+      },
+      {
+        question: "Além de entreter, a fábula tem qual função?",
+        options: [
+          "Educar e ensinar valores morais",
+          "Explicar regras de gramática",
+          "Narrar fatos históricos"
+        ],
+        answer: 0
+      },
+
+      // Módulo 28 - O conto
+      {
+        question: "O que caracteriza um conto?",
+        options: [
+          "Narrativa curta com enredo, personagens e desfecho",
+          "Um texto de humor curto, sem enredo",
+          "Um romance longo dividido em capítulos"
+        ],
+        answer: 0
+      },
+      {
+        question: "O foco principal do conto está em:",
+        options: [
+          "No enredo e no desfecho",
+          "Na descrição extensa do cenário",
+          "Na explicação de conceitos científicos"
+        ],
+        answer: 0
+      }
+    ];
+
+    let currentQuestion = 0;
+    let score = 0;
+
+    const questionEl = document.getElementById("question");
+    const optionsEl = document.getElementById("options");
+    const nextBtn = document.getElementById("next-btn");
+
+    function loadQuestion() {
+      const q = questions[currentQuestion];
+      questionEl.textContent = q.question;
+      optionsEl.innerHTML = "";
+      q.options.forEach((opt, i) => {
+        const btn = document.createElement("button");
+        btn.textContent = opt;
+        btn.onclick = () => checkAnswer(i, btn);
+        optionsEl.appendChild(btn);
+      });
+    }
+
+    function checkAnswer(i, btn) {
+      const correct = questions[currentQuestion].answer;
+      if (i === correct) {
+        btn.classList.add("correct");
+        score++;
+      } else {
+        btn.classList.add("wrong");
+      }
+      Array.from(optionsEl.children).forEach((b, index) => {
+        b.disabled = true;
+        if (index === correct) b.classList.add("correct");
+      });
+      nextBtn.style.display = "block";
+    }
+
+    nextBtn.addEventListener("click", () => {
+      currentQuestion++;
+      if (currentQuestion < questions.length) {
+        loadQuestion();
+        nextBtn.style.display = "none";
+      } else {
+        quiz.innerHTML = `<h2>Você acertou ${score} de ${questions.length} perguntas!</h2>`;
+      }
+    });
+
+    loadQuestion();
+  </script>
+</body>
+</html>
