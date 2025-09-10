@@ -73,7 +73,6 @@
 
   <script>
     const questions = [
-      // Módulo 25 - Fábula
       {
         question: "O que caracteriza uma fábula?",
         options: [
@@ -101,8 +100,6 @@
         ],
         answer: 0
       },
-
-      // Módulo 26 - Narrativa e linguagem
       {
         question: "O que são efeitos de sentido da linguagem em uma narrativa?",
         options: [
@@ -130,8 +127,6 @@
         ],
         answer: 0
       },
-
-      // Módulo 27 - Fábulas para ensinar
       {
         question: "Por que as fábulas são usadas como histórias para ensinar?",
         options: [
@@ -150,8 +145,6 @@
         ],
         answer: 0
       },
-
-      // Módulo 28 - O conto
       {
         question: "O que caracteriza um conto?",
         options: [
@@ -179,14 +172,27 @@
     const optionsEl = document.getElementById("options");
     const nextBtn = document.getElementById("next-btn");
 
+    // Função para embaralhar as opções
+    function shuffleOptions(q) {
+      const opts = q.options.map((opt, i) => ({ text: opt, index: i }));
+      for (let i = opts.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [opts[i], opts[j]] = [opts[j], opts[i]];
+      }
+      return opts;
+    }
+
     function loadQuestion() {
       const q = questions[currentQuestion];
       questionEl.textContent = q.question;
       optionsEl.innerHTML = "";
-      q.options.forEach((opt, i) => {
+
+      const shuffled = shuffleOptions(q);
+
+      shuffled.forEach((opt) => {
         const btn = document.createElement("button");
-        btn.textContent = opt;
-        btn.onclick = () => checkAnswer(i, btn);
+        btn.textContent = opt.text;
+        btn.onclick = () => checkAnswer(opt.index, btn);
         optionsEl.appendChild(btn);
       });
     }
@@ -199,9 +205,8 @@
       } else {
         btn.classList.add("wrong");
       }
-      Array.from(optionsEl.children).forEach((b, index) => {
+      Array.from(optionsEl.children).forEach((b) => {
         b.disabled = true;
-        if (index === correct) b.classList.add("correct");
       });
       nextBtn.style.display = "block";
     }
